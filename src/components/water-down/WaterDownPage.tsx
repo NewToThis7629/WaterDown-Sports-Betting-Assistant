@@ -6,47 +6,74 @@ import { Upload } from "lucide-react";
 import { BetCard } from "./BetCard";
 import { BetSlipDialog } from "./BetSlipDialog";
 import { ExtractedBet, Outcome } from "@/types/odds";
-import { extractTextFromImage, parseBetSlipText } from "@/lib/ocr";
+import { analyzeBetSlipImage } from "@/lib/ai";
 import { getMarkets } from "@/lib/odds-api";
 
 export default function WaterDownPage() {
   const location = useLocation();
-  const [image, setImage] = useState<string>(location.state?.image);
+  const [images, setImages] = useState<string[]>(
+    [location.state?.image].filter(Boolean),
+  );
   const [bets, setBets] = useState<ExtractedBet[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const files = event.target.files;
+    if (files) {
+      const newImages = Array.from(files).slice(0, 3 - images.length);
+
+      newImages.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImages((prev) => [...prev, reader.result as string]);
+          setError(null);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
   const analyzeBets = async () => {
-    if (!image) return;
+    if (images.length === 0) return;
 
-    const text = await extractTextFromImage(image);
-    const extractedBets = parseBetSlipText(text);
-    const betsWithAlternatives = await Promise.all(
-      extractedBets.map(async (bet) => {
-        const markets = await getMarkets("nba", bet.player, bet);
-        return {
-          ...bet,
-          alternatives: markets[0]?.outcomes || [],
-        };
-      }),
-    );
-    setBets(betsWithAlternatives);
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Analyze all images with GPT-4V
+      const allBets = await Promise.all(images.map(analyzeBetSlipImage));
+      const extractedBets = allBets.flat();
+      console.log("Extracted bets:", extractedBets);
+
+      if (extractedBets.length === 0) {
+        throw new Error("No bets could be extracted from the image");
+      }
+
+      // Get alternatives for each bet
+      const betsWithAlternatives = await Promise.all(
+        extractedBets.map(async (bet) => {
+          const markets = await getMarkets("any", bet.player, bet);
+          return {
+            ...bet,
+            alternatives: markets[0]?.outcomes || [],
+          };
+        }),
+      );
+
+      setBets(betsWithAlternatives);
+    } catch (err) {
+      console.error("Error analyzing bets:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to analyze bet slip",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleAlternativeSelect = async (
-    betId: string,
-    alternative: Outcome,
-  ) => {
+  const handleAlternativeSelect = (betId: string, alternative: Outcome) => {
     setBets((prevBets) =>
       prevBets.map((bet) =>
         bet.id === betId
@@ -77,18 +104,23 @@ export default function WaterDownPage() {
               className="w-full h-72 border-2 border-dashed rounded-xl flex items-center justify-center bg-muted/5 hover:bg-muted/10 transition-colors cursor-pointer mb-4"
               onClick={() => document.getElementById("image-upload")?.click()}
             >
-              {image ? (
-                <img
-                  src={image}
-                  alt="Original bet slip"
-                  className="max-h-full object-contain"
-                />
+              {images.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 w-full h-full">
+                  {images.map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`Bet slip ${index + 1}`}
+                      className="max-h-32 object-contain mx-auto"
+                    />
+                  ))}
+                </div>
               ) : (
                 <div className="flex flex-col items-center gap-4 text-muted-foreground">
                   <Upload size={48} className="text-blue-500" />
                   <div className="text-center">
                     <p className="font-medium">
-                      Drop your bet slip screenshot here
+                      Drop up to 3 bet slip screenshots here
                     </p>
                     <p className="text-sm">or click to select a file</p>
                   </div>
@@ -98,12 +130,18 @@ export default function WaterDownPage() {
             <input
               type="file"
               accept="image/*"
+              multiple
+              max="3"
               onChange={handleImageUpload}
               className="hidden"
               id="image-upload"
             />
-            <Button className="w-full" onClick={analyzeBets} disabled={!image}>
-              Analyze Bets
+            <Button
+              className="w-full"
+              onClick={analyzeBets}
+              disabled={images.length === 0 || loading}
+            >
+              {loading ? "Analyzing..." : "Analyze Bets"}
             </Button>
           </Card>
 

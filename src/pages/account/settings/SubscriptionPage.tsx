@@ -2,7 +2,18 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Check, Star } from "lucide-react";
+import { Check, AlertTriangle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const PLANS = [
   {
@@ -72,7 +83,27 @@ export default function SubscriptionPage() {
                 <p className="font-medium">Next billing date</p>
                 <p className="text-sm text-muted-foreground">April 1, 2024</p>
               </div>
-              <Button variant="outline">Cancel Subscription</Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline">Cancel Subscription</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Cancel Subscription?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to cancel your subscription? You'll
+                      lose access to premium features at the end of your current
+                      billing period.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
+                    <AlertDialogAction className="bg-red-500 hover:bg-red-600">
+                      Cancel Subscription
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </Card>
@@ -111,6 +142,50 @@ export default function SubscriptionPage() {
             </Card>
           ))}
         </div>
+
+        <Card className="p-6 border-destructive/50">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              <h3 className="text-xl font-semibold text-destructive">
+                Danger Zone
+              </h3>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Permanently delete your account and all associated data. This
+              action cannot be undone.
+            </p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Delete Account</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription className="space-y-2">
+                    <p>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove all of your data from our servers,
+                      including:
+                    </p>
+                    <ul className="list-disc pl-4 text-sm text-muted-foreground space-y-1">
+                      <li>Your profile and personal information</li>
+                      <li>All betting history and analysis data</li>
+                      <li>Saved preferences and settings</li>
+                      <li>Subscription and billing information</li>
+                    </ul>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction className="bg-red-500 hover:bg-red-600">
+                    Delete Account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        </Card>
       </div>
     </div>
   );

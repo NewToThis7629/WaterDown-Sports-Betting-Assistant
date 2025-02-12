@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Water Down Sports Betting Assistant - Documentation</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 3rem;
+        color: #1a1a1a;
+        background: #ffffff;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #e5e7eb;
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        color: #3b82f6;
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #1e40af;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        color: #2563eb;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        color: #3b82f6;
+        margin-top: 2rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+        color: #374151;
+        margin-bottom: 1.5rem;
+      }
+
+      code {
+        background: #f1f5f9;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-family: "Menlo", monospace;
+        font-size: 0.9rem;
+        color: #2563eb;
+      }
+
+      pre {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+        overflow-x: auto;
+        font-family: "Menlo", monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin: 1.5rem 0;
+      }
+
+      ul,
+      ol {
+        padding-left: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      li {
+        margin: 0.75rem 0;
+        color: #374151;
+      }
+
+      .feature-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .emoji {
+        font-size: 1.4rem;
+        margin-right: 0.5rem;
+      }
+
+      .section {
+        margin: 3rem 0;
+        padding: 2rem;
+        background: #f8fafc;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+      }
+
+      .highlight {
+        background: #dbeafe;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        color: #1e40af;
+        font-weight: 500;
+      }
+
+      @media print {
+        body {
+          padding: 2rem;
+        }
+
+        pre,
+        code {
+          white-space: pre-wrap;
+        }
+
+        .section {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">📊</div>
+      <h1>Water Down Sports Betting Assistant</h1>
+      <p style="font-size: 1.2rem; color: #6b7280">
+        Technical Documentation & Development Guide
+      </p>
+    </div>
+
+    <div class="section">
+      <p>
+        A React application that helps users analyze and optimize their sports
+        betting slips by finding lower-risk alternatives while maintaining
+        potential profits.
+      </p>
+
+      <h2>Features</h2>
+      <ul class="feature-list">
+        <li>
+          🎯 <strong>Bet Slip Analysis:</strong> Upload and analyze betting
+          slips via OCR
+        </li>
+        <li>
+          📊 <strong>Alternative Bets:</strong> Find lower-risk betting options
+        </li>
+        <li>
+          🔄 <strong>Real-time Odds Integration:</strong> Connect to live odds
+          API
+        </li>
+        <li>
+          📱 <strong>Responsive Design:</strong> Works on desktop and mobile
+        </li>
+        <li>🔒 <strong>Authentication:</strong> Google sign-in integration</li>
+        <li>🎨 <strong>Modern UI:</strong> Built with shadcn components</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Tech Stack</h2>
+      <ul>
+        <li>
+          <span class="highlight">React + TypeScript</span> - Frontend framework
+        </li>
+        <li><span class="highlight">Vite</span> - Build tool</li>
+        <li><span class="highlight">Tailwind CSS</span> - Styling</li>
+        <li><span class="highlight">shadcn/ui</span> - Component library</li>
+        <li><span class="highlight">Tesseract.js</span> - OCR processing</li>
+        <li><span class="highlight">React Router</span> - Navigation</li>
+      </ul>
+    </div>
+
+    <h2>Getting Started</h2>
+    <div class="section">
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>Node.js 16+</li>
+        <li>npm/yarn/pnpm</li>
+      </ul>
+
+      <h3>Installation</h3>
+      <ol>
+        <li>
+          Clone the repository:
+          <pre>
+git clone [repository-url]
+cd water-down-betting</pre
+          >
+        </li>
+        <li>
+          Install dependencies:
+          <pre>npm install</pre>
+        </li>
+        <li>
+          Set up environment variables:
+          <pre>
+VITE_ODDS_API_KEY=your_odds_api_key
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key</pre
+          >
+        </li>
+        <li>
+          Start development server:
+          <pre>npm run dev</pre>
+        </li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>Project Structure</h2>
+      <pre>
+src/
+├── components/         # Reusable UI components
+│   ├── auth/          # Authentication components
+│   ├── bet-analyzer/  # Bet analysis components
+│   ├── water-down/    # Water down feature components
+│   └── ui/           # shadcn components
+├── lib/              # Utility functions and API
+├── pages/           # Route pages
+└── types/           # TypeScript types</pre
+      >
+    </div>
+
+    <div class="section">
+      <h2>Key Components</h2>
+      <h3>BetSlipUploader</h3>
+      <ul>
+        <li>Handles image upload</li>
+        <li>Supports drag & drop</li>
+        <li>Validates file types</li>
+      </ul>
+
+      <h3>WaterDownPage</h3>
+      <ul>
+        <li>Main feature page</li>
+        <li>Processes bet slip images</li>
+        <li>Shows alternative bets</li>
+      </ul>
+
+      <h3>BetCard</h3>
+      <ul>
+        <li>Displays individual bets</li>
+        <li>Allows odds adjustment</li>
+        <li>Shows alternative options</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Development Workflow</h2>
+      <ol>
+        <li>
+          <strong>Feature Development</strong>
+          <ul>
+            <li>Create component in appropriate directory</li>
+            <li>Add to relevant page</li>
+            <li>Test in isolation using storyboards</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Testing</strong>
+          <ul>
+            <li>Test OCR with various bet slip formats</li>
+            <li>Verify odds calculations</li>
+            <li>Check responsive design</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Deployment</strong>
+          <ul>
+            <li>Build production version</li>
+            <li>Deploy static assets</li>
+            <li>Update documentation</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>API Integration</h2>
+      <h3>Odds API</h3>
+      <ul>
+        <li>Endpoint: <code>https://api.the-odds-api.com/v4</code></li>
+        <li>Used for fetching live odds</li>
+        <li>Rate limited - check usage</li>
+      </ul>
+
+      <h3>OCR Processing</h3>
+      <ul>
+        <li>Uses Tesseract.js</li>
+        <li>Optimized for bet slip format</li>
+        <li>Supports multiple sportsbooks</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Styling</h2>
+      <ul>
+        <li>Uses Tailwind CSS</li>
+        <li>Follows shadcn/ui design system</li>
+        <li>Dark mode support</li>
+        <li>Responsive breakpoints</li>
+      </ul>
+
+      <h2>Authentication</h2>
+      <ul>
+        <li>Google OAuth integration</li>
+        <li>Protected routes</li>
+        <li>Session management</li>
+        <li>Mock auth for development</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Contributing</h2>
+      <ol>
+        <li>Fork the repository</li>
+        <li>Create feature branch</li>
+        <li>Commit changes</li>
+        <li>Push to branch</li>
+        <li>Open pull request</li>
+      </ol>
+
+      <h2>License</h2>
+      <p>MIT License - see LICENSE file</p>
+
+      <h2>Support</h2>
+      <p>For support, email [support@email.com]</p>
+    </div>
+
+    <div class="section">
+      <h2>Roadmap</h2>
+      <ul>
+        <li>[ ] Add more sportsbook integrations</li>
+        <li>[ ] Implement parlay optimization</li>
+        <li>[ ] Add bet history tracking</li>
+        <li>[ ] Enhanced analytics dashboard</li>
+        <li>[ ] Mobile app version</li>
+      </ul>
+    </div>
+  </body>
+</html>

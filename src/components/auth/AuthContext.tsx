@@ -12,7 +12,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
 });
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,13 +24,16 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     // Listen for auth changes
-    const subscription = onAuthStateChange((user) => {
+    const { subscription } = onAuthStateChange((user) => {
       setUser(user);
       setLoading(false);
     });
 
+    // Cleanup subscription
     return () => {
-      subscription.then((data) => data.subscription.unsubscribe());
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
@@ -39,14 +42,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
-
-export { AuthProvider, useAuth };
+}

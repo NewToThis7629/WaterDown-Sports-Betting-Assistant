@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ExtractedBet } from "@/types/odds";
-import { generateBetSlipLinks } from "@/lib/bet-slip";
+import { generateBetSlipLinks } from "@/lib/bet-slip-links";
 import { ExternalLink } from "lucide-react";
 
 interface BetSlipDialogProps {

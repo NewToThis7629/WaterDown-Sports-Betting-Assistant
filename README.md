@@ -1,30 +1,151 @@
-# React + TypeScript + Vite
+# Water Down Sports Betting Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application that helps users analyze and optimize their sports betting slips by finding lower-risk alternatives while maintaining potential profits.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎯 Bet Slip Analysis: Upload and analyze betting slips via OCR
+- 📊 Alternative Bets: Find lower-risk betting options
+- 🔄 Real-time Odds Integration: Connect to live odds API
+- 📱 Responsive Design: Works on desktop and mobile
+- 🔒 Authentication: Google sign-in integration
+- 🎨 Modern UI: Built with shadcn components
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui Components
+- Tesseract.js for OCR
+- React Router for navigation
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+### Prerequisites
+
+- Node.js 16+
+- npm/yarn/pnpm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone [repository-url]
+cd water-down-betting
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+```env
+VITE_ODDS_API_KEY=your_odds_api_key
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+```
+
+4. Start development server:
+```bash
+npm run dev
+```
+
+## Project Structure
+
+```
+src/
+├── components/         # Reusable UI components
+│   ├── auth/          # Authentication components
+│   ├── bet-analyzer/  # Bet analysis components
+│   ├── water-down/    # Water down feature components
+│   └── ui/           # shadcn components
+├── lib/              # Utility functions and API
+├── pages/           # Route pages
+└── types/           # TypeScript types
+```
+
+## Key Components
+
+### BetSlipUploader
+- Handles image upload
+- Supports drag & drop
+- Validates file types
+
+### WaterDownPage
+- Main feature page
+- Processes bet slip images
+- Shows alternative bets
+
+### BetCard
+- Displays individual bets
+- Allows odds adjustment
+- Shows alternative options
+
+## Development Workflow
+
+1. **Feature Development**
+   - Create component in appropriate directory
+   - Add to relevant page
+   - Test in isolation using storyboards
+
+2. **Testing**
+   - Test OCR with various bet slip formats
+   - Verify odds calculations
+   - Check responsive design
+
+3. **Deployment**
+   - Build production version
+   - Deploy static assets
+   - Update documentation
+
+## API Integration
+
+### Odds API
+- Endpoint: `https://api.the-odds-api.com/v4`
+- Used for fetching live odds
+- Rate limited - check usage
+
+### OCR Processing
+- Uses Tesseract.js
+- Optimized for bet slip format
+- Supports multiple sportsbooks
+
+## Styling
+
+- Uses Tailwind CSS
+- Follows shadcn/ui design system
+- Dark mode support
+- Responsive breakpoints
+
+## Authentication
+
+- Google OAuth integration
+- Protected routes
+- Session management
+- Mock auth for development
+
+## Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open pull request
+
+## License
+
+MIT License - see LICENSE file
+
+## Support
+
+For support, email [support@email.com]
+
+## Roadmap
+
+- [ ] Add more sportsbook integrations
+- [ ] Implement parlay optimization
+- [ ] Add bet history tracking
+- [ ] Enhanced analytics dashboard
+- [ ] Mobile app version

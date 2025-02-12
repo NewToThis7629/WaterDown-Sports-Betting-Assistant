@@ -5,13 +5,19 @@ import {
   Navigate,
   useNavigate,
   useOutlet,
+  useRoutes,
 } from "react-router-dom";
 import Home from "./components/home";
 import WaterDownPage from "./components/water-down/WaterDownPage";
+import IncreaseRiskPage from "./pages/increase-risk/IncreaseRiskPage";
 import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import { Layout } from "./components/layout/Layout";
 import { AuthProvider, useAuth } from "./components/auth/AuthContext";
+import FAQsPage from "./pages/help/FAQsPage";
+import TutorialsPage from "./pages/help/TutorialsPage";
+import ContactPage from "./pages/help/ContactPage";
+import routes from "tempo-routes";
 
 // Import all page components
 import ScoresPage from "./pages/scores/ScoresPage";
@@ -21,7 +27,7 @@ import ParlaysPage from "./pages/analytics/ParlaysPage";
 import StraightBetsPage from "./pages/analytics/StraightBetsPage";
 import StatsPage from "./pages/analytics/StatsPage";
 import HistoryPage from "./pages/account/HistoryPage";
-import NotificationsPage from "./pages/account/settings/NotificationsPage";
+import NotificationsPage from "./pages/notifications/NotificationsPage";
 import CommunicationsPage from "./pages/account/settings/CommunicationsPage";
 import EditProfilePage from "./pages/account/profile/EditProfilePage";
 import SecurityPage from "./pages/account/settings/SecurityPage";
@@ -33,6 +39,9 @@ function App() {
   return (
     <AuthProvider>
       <Suspense fallback={<div>Loading...</div>}>
+        {/* For the tempo routes */}
+        {import.meta.env.VITE_TEMPO && useRoutes(routes)}
+
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -41,21 +50,30 @@ function App() {
           {/* Protected routes */}
           <Route element={<RequireAuth />}>
             <Route element={<Layout />}>
+              {/* Main routes */}
               <Route path="/" element={<Home />} />
               <Route path="/water-down" element={<WaterDownPage />} />
+              <Route path="/increase-risk" element={<IncreaseRiskPage />} />
               <Route path="/scores" element={<ScoresPage />} />
+
+              {/* Social routes */}
               <Route path="/social/forum" element={<ForumPage />} />
               <Route
                 path="/social/leaderboards"
                 element={<LeaderboardsPage />}
               />
+
+              {/* Analytics routes */}
               <Route path="/analytics/parlays" element={<ParlaysPage />} />
               <Route
                 path="/analytics/straight-bets"
                 element={<StraightBetsPage />}
               />
               <Route path="/analytics/stats" element={<StatsPage />} />
+
+              {/* Account routes */}
               <Route path="/account/history" element={<HistoryPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
               <Route
                 path="/account/notifications"
                 element={<NotificationsPage />}
@@ -93,6 +111,8 @@ function App() {
                 path="/account/profile/privacy"
                 element={<SecurityPage />}
               />
+
+              {/* Settings routes */}
               <Route
                 path="/appearance/theme"
                 element={<AppearanceSettings />}
@@ -101,17 +121,19 @@ function App() {
                 path="/appearance/language"
                 element={<AppearanceSettings />}
               />
-              <Route path="/help/faqs" element={<div>FAQs Coming Soon</div>} />
-              <Route
-                path="/help/tutorials"
-                element={<div>Tutorials Coming Soon</div>}
-              />
-              <Route
-                path="/help/contact"
-                element={<div>Contact Support Coming Soon</div>}
-              />
+
+              {/* Help routes */}
+              <Route path="/help/faqs" element={<FAQsPage />} />
+              <Route path="/help/tutorials" element={<TutorialsPage />} />
+              <Route path="/help/contact" element={<ContactPage />} />
+
+              {/* Add this before the catchall route */}
+              {import.meta.env.VITE_TEMPO && <Route path="/tempobook/*" />}
             </Route>
           </Route>
+
+          {/* Catch-all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </AuthProvider>

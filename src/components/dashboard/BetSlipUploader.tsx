@@ -7,24 +7,27 @@ import { Card } from "@/components/ui/card";
 
 export default function BetSlipUploader() {
   const navigate = useNavigate();
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [betSlipLink, setBetSlipLink] = useState("");
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setImage(result);
-      };
-      reader.readAsDataURL(file);
+    const files = event.target.files;
+    if (files) {
+      const newImages = Array.from(files).slice(0, 3 - images.length);
+
+      newImages.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImages((prev) => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
   const handleWaterDown = () => {
-    if (image || betSlipLink) {
-      navigate("/water-down", { state: { image, betSlipLink } });
+    if (images.length > 0 || betSlipLink) {
+      navigate("/water-down", { state: { images, betSlipLink } });
     }
   };
 
@@ -34,7 +37,8 @@ export default function BetSlipUploader() {
         <div className="space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">Upload Bet Slip</h2>
           <p className="text-muted-foreground">
-            Upload a screenshot or paste your bet slip link to get started
+            Upload up to 3 screenshots or paste your bet slip link to get
+            started
           </p>
         </div>
 
@@ -43,20 +47,25 @@ export default function BetSlipUploader() {
             className="w-full h-72 border-2 border-dashed rounded-xl flex items-center justify-center bg-[#3B82F6]/5 hover:bg-[#3B82F6]/10 transition-colors cursor-pointer overflow-hidden"
             onClick={() => document.getElementById("image-upload")?.click()}
           >
-            {image ? (
-              <img
-                src={image}
-                alt="Uploaded bet slip"
-                className="max-h-full object-contain"
-              />
+            {images.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 w-full h-full">
+                {images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Bet slip ${index + 1}`}
+                    className="max-h-32 object-contain mx-auto"
+                  />
+                ))}
+              </div>
             ) : (
               <div className="flex flex-col items-center gap-4 text-muted-foreground">
                 <Upload size={48} className="text-[#3B82F6]" />
                 <div className="text-center">
                   <p className="font-medium">
-                    Drop your bet slip screenshot here
+                    Drop up to 3 bet slip screenshots here
                   </p>
-                  <p className="text-sm">or click to select a file</p>
+                  <p className="text-sm">or click to select files</p>
                 </div>
               </div>
             )}
@@ -78,7 +87,7 @@ export default function BetSlipUploader() {
         <Button
           className="w-full text-lg py-6 bg-[#3B82F6] hover:bg-[#2563EB] transition-colors"
           onClick={handleWaterDown}
-          disabled={!image && !betSlipLink}
+          disabled={images.length === 0 && !betSlipLink}
         >
           Water Down My Bets
           <ArrowRight className="ml-2 h-5 w-5" />
@@ -87,6 +96,8 @@ export default function BetSlipUploader() {
         <input
           type="file"
           accept="image/*"
+          multiple
+          max="3"
           onChange={handleImageUpload}
           className="hidden"
           id="image-upload"

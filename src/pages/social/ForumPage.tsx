@@ -101,7 +101,7 @@ export default function ForumPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <Avatar>
-                          <AvatarImage src={post.avatar} />
+                          <AvatarImage src={post.author.avatar} />
                           <AvatarFallback>{post.author.name[0]}</AvatarFallback>
                         </Avatar>
                         <div>

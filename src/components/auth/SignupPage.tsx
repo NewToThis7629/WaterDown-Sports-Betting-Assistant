@@ -3,19 +3,74 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInWithGoogle } from "@/lib/auth";
+import { signInWithGoogle, signUpWithEmail } from "@/lib/auth";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleEmailSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Passwords do not match",
+        description: "Please make sure your passwords match.",
+      });
+      return;
+    }
+
+    if (password.length < 8) {
+      toast({
+        variant: "destructive",
+        title: "Password too short",
+        description: "Password must be at least 8 characters long.",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { user, error } = await signUpWithEmail(email, password);
+      if (error) throw error;
+      if (user) {
+        toast({
+          title: "Welcome!",
+          description: "Your account has been created successfully.",
+        });
+        navigate("/");
+      }
+    } catch (error: any) {
+      console.error("Error signing up with email:", error);
+      toast({
+        variant: "destructive",
+        title: "Error signing up",
+        description:
+          error.message ||
+          "There was a problem creating your account. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
-      navigate("/");
+      const { user, error } = await signInWithGoogle();
+      if (error) throw error;
+      if (user) {
+        toast({
+          title: "Welcome!",
+          description: "Successfully signed in with Google.",
+        });
+        navigate("/");
+      }
     } catch (error) {
       console.error("Error signing in with Google:", error);
       toast({
@@ -64,7 +119,7 @@ export default function SignupPage() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <form onSubmit={handleEmailSignUp} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white">
                 Email<span className="text-red-500">*</span>
@@ -74,6 +129,9 @@ export default function SignupPage() {
                 type="email"
                 placeholder="your@email.com"
                 className="bg-[#0F2756] border-gray-700 text-white placeholder:text-gray-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -86,6 +144,10 @@ export default function SignupPage() {
                 type="password"
                 placeholder="Min. 8 characters"
                 className="bg-[#0F2756] border-gray-700 text-white placeholder:text-gray-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
               />
             </div>
 
@@ -98,11 +160,19 @@ export default function SignupPage() {
                 type="password"
                 placeholder="Re-enter your password"
                 className="bg-[#0F2756] border-gray-700 text-white placeholder:text-gray-500"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={8}
               />
             </div>
 
-            <Button className="w-full bg-[#60A5FA] hover:bg-blue-500 text-white py-6">
-              Create Account
+            <Button
+              type="submit"
+              className="w-full bg-[#60A5FA] hover:bg-blue-500 text-white py-6"
+              disabled={loading}
+            >
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
 
             <p className="text-center text-gray-400 text-sm">
@@ -115,7 +185,7 @@ export default function SignupPage() {
                 Sign in
               </Button>
             </p>
-          </div>
+          </form>
         </div>
 
         {/* Logo Section */}
