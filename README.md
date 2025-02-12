@@ -17,7 +17,7 @@ A React application that helps users analyze and optimize their sports betting s
 - Vite
 - Tailwind CSS
 - shadcn/ui Components
-- Tesseract.js for OCR
+- OpenAI's GPT-4o for OCR
 - React Router for navigation
 
 ## Getting Started
